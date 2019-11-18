@@ -1,0 +1,336 @@
+
+
+<html>
+		{% csrf_token %}
+<head>
+	<title>
+		EXPENSE
+	</title>
+
+	<link rel="icon" type="image/jpg" href="imgs/oyy.jpg">
+
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <style>
+	  #b1{
+
+padding-top: 150px;
+padding-right: 200px;
+padding-left: 200px;
+
+
+}
+#m1{
+	margin-left: 50px;
+	
+}
+#j2{
+	align:center;
+}
+#j1{
+	margin-top:10px ;
+}
+#f1{color:red}
+#f2{color:rgb(112, 252, 112)}
+#j71{
+      margin-top: 2%;
+	  margin-right:10%;}
+#w12{
+width:150px;}
+#c11{margin-left:20%;}
+  </style>
+
+</head>
+<body style="background:radial-gradient(#00f3b0,rgb(0, 255, 179),#00b0eb)" id="j71" >
+  	<header >
+  		<div id="c11">
+
+  			<div class="row no-gutters">
+  				<div class="col-lg-4 col-md-4">
+  					
+
+  		        </div>
+  		    </div>
+  			<div class=" d-flex col-lg-5 col-md-5" >
+  				<div class="d-flex flex-column ">
+  					
+  					
+					 
+  					<div class="d-flex flex-row text-center text-white ">
+						
+						  <div id="w12"><div class="p-4 bg-success font-div" data-toggle="collapse" data-target="#User">
+  							<i class="fa fa-user fa-2x d-block"></i>User
+						  </div></div>
+						  <div id="w12"><div class="p-4 bg-warning font-div" data-toggle="collapse" data-target="#frnd">
+							<i class="fa fa-heart fa-2x d-block"></i>Friends
+						  </div></div>
+  						  <div id="w12"><div class="p-4 bg-danger font-div" data-toggle="collapse" data-target="#Group">
+  							<i class="fa fa-group fa-2x d-block"></i>Make_Group
+  						  </div></div>				
+  						  <div id="w12"><div class="p-4 bg-warning font-div" data-toggle="collapse" data-target="#Split">
+  							<i class="fa fa-plus fa-2x d-block"></i>ADD
+  						  </div></div>
+						  <div id="w12"><div class="p-4 bg-danger font-div" data-toggle="collapse" data-target="#Act">
+							<i class="fa fa-laptop fa-2x d-block"></i>Activity
+						  </div></div>
+  						  <div id="w12"><div class="p-4 bg-success font-div" data-toggle="collapse" data-target="#ABOUT_ME">
+  							<i class="fa fa-home fa-2x d-block"></i>ABOUT_US
+  						  </div></div>
+  						
+  					</div>
+
+  				</div>
+  			</div>
+  		</div>
+		
+  	</header>
+
+  	<div id="b1">
+			
+  		<div class="collapse" id="User">
+  			<div class="p-5 text-white bg-success">
+  				<h2>About Users</h2>
+  			</div>
+				<div class="card card-body">
+						{% csrf_token %}
+					<p>
+											</p>
+					<h3><div class="p-2 text-white bg-dark">User Name: {{ user.username }}</div></h3>
+
+					
+					<h3><div class="p-2 text-white bg-dark">Group: </div></h3>
+
+					
+					<h3><div class="p-4 bg-dark text-white font-div" data-toggle="collapse" data-target="#account">
+  							<i class="fa fa-bank fa-2x d-block"></i>Account<br>TotalBalance: {{bal.totalbalance}}<br><div id="f1">youowe: {{bal.youowe}}</div><div id="f2">owesYou: {{bal.youareowed}}</div></h3>
+
+					
+							  <h3><div class="p-2 text-white bg-dark"><a href="/splits/logout"><input type="button" value="LOGOUT"></a></div></h3>
+
+
+					
+
+				
+  			
+
+  		        </div>
+		  </div>
+		  
+	 <div class="collapse" id="frnd">
+		<div class="p-5 text-white bg-warning">
+			<h2>Make Friend</h2>
+			
+	  </div>
+	  <div class="card card-body">
+	  <br>
+	  <div class="p-2 text-white bg-dark">
+	   
+	  <form method="post">
+			{% csrf_token %}
+		Add_Friend:
+	  <select name="frndsel" class="p-2 text-white bg-dark">
+			{% for userx in all %}
+			<option  value="{{userx.user.username}}">{{userx}}</option>
+			  {% endfor %} 
+	  </select>
+	</div>
+	  <div id="j1">
+	  <div class="p-2 text-white bg-dark">
+	  <input type="submit" value="ADD"/>
+	</div>
+	  </div>
+	  </form>
+	   </div>
+	  </div>
+
+		  
+	 
+	  <div class="collapse" id="Group">
+  			<div class="p-5 text-white bg-danger">
+  				<h2>Group Forming</h2>
+				  
+			</div>
+			
+			<div class="card card-body">
+					<form method="post">
+							{% csrf_token %}
+				<b>Group_name:</b>
+					<input type="text" name="" class="p-2 text-white bg-dark " required>
+			
+					{% for userx in frnds %}
+					<h6><input type="checkbox" name="friend">&nbsp;&nbsp;{{userx}}</h6>
+					{% endfor %}
+					<h3><input type="submit" value="Create"></h3>
+			
+			</div>
+			</form>
+     </div>
+			
+  			
+  		
+
+
+
+  		<div class="collapse" id="Split">
+  				<div class="p-5 text-white bg-warning">
+  				<h2>
+  					SPLIT</h2>
+  					<p>
+  						
+  					</p>
+				</div>
+				<div class="card card-body">
+				
+					<div class="row justify-content-center">
+						<div class="col-lg-8 col-md-8 col-12">
+
+							<form>
+								<div class="form-group">
+									<div class="input-group input-group-lg">
+										<span class="input-group-addon bg-warning text-white">
+											<i class="fa fa-book fa-3x"></i>
+										</span>
+										<input type="text" name="" class="form-control bg-dark text-white" placeholder="Sub of expense" required>
+									
+								</div>
+								<div class="form-group">
+									<div class="input-group input-group-lg">
+										<span class="input-group-addon bg-warning text-white">
+											<i class="fa fa-rupee fa-3x"></i>
+										</span>
+										<input type="number" name="" class="form-control bg-dark text-white" placeholder="Amount of expense" required>
+									
+								</div>
+								<div class="form-group">
+									<div class="input-group input-group-lg">
+										<span class="input-group-addon bg-warning text-white">
+											<i class="fa fa-Flag fa-2x"></i>&nbsp &nbsp
+										</span>
+										  <select name="" class="form-control bg-dark text-white" placeholder="Type">
+  
+                                              <option value="equally">Equally</option>
+                                                 <option value="owes you ">Owes You</option>
+                                                  <option value="You Owe">You Owe</option>
+
+                                                       </select>
+
+								</div>
+								  <div class="input-group input-group-lg">
+										<span class="input-group-addon bg-warning text-white">
+											<i class="fa fa-group fa-2x"></i>&nbsp &nbsp
+										</span>
+										  <select name="" class="form-control bg-dark text-white" placeholder="group">
+                                                <option value="equally"></option>
+                                                 <option value="owes you "></option>
+                                                  <option value="You Owe"></option>
+
+                                                       </select>
+
+								</div><br><br>
+								<div class="form-group">
+									<input type="submit" name="" class="form-control bg-danger text-dark" >
+								</div>
+							</form>
+							
+						</div>
+					</div>
+					
+				</div>
+		
+  			
+  		</div>	</div></div></div>
+		
+		
+		
+		
+		<div class="collapse" id="Act">
+  			<div class="p-5 text-white bg-success">
+  				<h2>Activity</h2>
+  			</div>
+				<div class="card card-body">
+					
+					<p>
+											</p>
+					<h3><div class="p-2 text-white bg-dark">Party</div></h3>
+					
+
+					
+					
+
+					
+					
+
+					
+
+				
+  			
+
+  		        </div>
+  	    </div>
+		
+		
+		
+  	
+  		<div class="collapse" id="ABOUT_ME">
+  			<div class="p-5 text-white bg-success">
+  				<h2>About Us</h2>
+  			</div>
+				<div class="card card-body">
+					
+					<p>
+											</p>
+					<h3><div class="p-2 text-white bg-dark">Name: Jimit Patel, Manan Patel</div></h3>
+					<h3><div class="p-2 text-white bg-dark">Roll No.: 17Bce079,17bce081</div></h3>
+                    <h3><div class="p-2 text-white bg-dark">Guide : Prof.Kavita Tewani</div></h3>
+					
+					<h3><div class="p-2 text-white bg-dark">Admin: Manan Patel</div></h3>
+
+					
+					
+
+					
+					
+
+					
+
+				
+  			
+
+  		        </div>
+  	    </div>
+			</div>
+
+        	
+  		
+
+
+
+
+
+
+
+
+
+
+
+
+  	
+  	</div>
+
+
+	
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script type="text/javascript">
+  	$('.font-div').click(function(){
+  		$('.collapse').collapse('hide');
+
+  	});
+  </script>
+</body>
+</html>
