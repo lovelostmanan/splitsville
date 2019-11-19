@@ -23,7 +23,19 @@ class postlongin(View):
             flist = f_list.objects.get(person=p)
             flist = flist.frnd.all()
 
-            context = {"user":user,"bal":account,"frnds":flist,"all":all_people}
+            all_grps = make_group.objects.all()
+            my_grps = []
+
+            for x in all_grps:
+                for y in x.glist.all():
+                    if y == p:
+                        my_grps.append(x)
+
+            context = {"user":user,
+                        "bal":account,
+                        "frnds":flist,
+                        "all":all_people,
+                        "my_grps":my_grps}
             return render(request,self.temp,context)
         else:
             return HttpResponse("login failed")
@@ -31,6 +43,12 @@ class postlongin(View):
     def post(self,request):
         user = request.user
         if user.is_active:
+
+            all_people = person.objects.all()
+            p = person.objects.get(user=user)
+            pf = friend.objects.get(frnd=p)
+            flist = f_list.objects.get(person=p)
+
             if len(request.POST.getlist("friend_make_grp")) > 0:
                 mems_users = [User.objects.get(username=x) for x in request.POST.getlist("friend_make_grp")]
                 mems = [ person.objects.get(user = x) for x in mems_users]
@@ -40,26 +58,34 @@ class postlongin(View):
                     new_grp.glist.add(x)
 
                 new_grp.save()
+            
+            if type(request.POST.get("frndsel")) != type(None) :
+                if len(request.POST.get("frndsel")) > 0:
+                    frnd_uname = request.POST.get("frndsel")
+                    frnd_user = User.objects.get(username=frnd_uname)
+                    frnd_person = person.objects.get(user=frnd_user)
+                    frnd_friend = friend.objects.get(frnd=frnd_person)
+                    frnt_flist = f_list.objects.get(person=frnd_person)
 
-            all_people = person.objects.all()
-            p = person.objects.get(user=user)
-            pf = friend.objects.get(frnd=p)
-            flist = f_list.objects.get(person=p)
-
-            frnd_uname = request.POST.get("frndsel")
-            frnd_user = User.objects.get(username=frnd_uname)
-            frnd_person = person.objects.get(user=frnd_user)
-            frnd_friend = friend.objects.get(frnd=frnd_person)
-            frnt_flist = f_list.objects.get(person=frnd_person)
-
-            frnt_flist.frnd.add(pf)
-            frnt_flist.save()
-            flist.frnd.add(frnd_friend)
-            flist.save()
+                    frnt_flist.frnd.add(pf)
+                    frnt_flist.save()
+                    flist.frnd.add(frnd_friend)
+                    flist.save()            
 
             flist_ppl = flist.frnd.all()
+            all_grps = make_group.objects.all()
+            my_grps = []
 
-            context = {"user":user,"bal":account,"frnds":flist_ppl,"all":all_people}
+            for x in all_grps:
+                for y in x.glist.all():
+                    if y == p:
+                        my_grps.append(x)
+
+            context = {"user":user,
+                        "bal":account,
+                        "frnds":flist_ppl,
+                        "all":all_people,
+                        "my_grps":my_grps}
             return render(request,self.temp,context)
         else:
             return HttpResponse("login failed")
