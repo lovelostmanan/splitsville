@@ -158,10 +158,10 @@ width:150px;}
 					<form method="post">
 							{% csrf_token %}
 				<b>Group_name:</b>
-					<input type="text" name="" class="p-2 text-white bg-dark " required>
+					<input type="text" name="make_grp_name" class="p-2 text-white bg-dark " required>
 			
 					{% for userx in frnds %}
-					<h6><input type="checkbox" name="friend">&nbsp;&nbsp;{{userx}}</h6>
+					<h6><input type="checkbox" name="friend_make_grp" value="{{userx.frnd.user.username}}">&nbsp;&nbsp;{{userx.frnd.user.username}}</h6>
 					{% endfor %}
 					<h3><input type="submit" value="Create"></h3>
 			

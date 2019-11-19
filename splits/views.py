@@ -4,7 +4,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from .models import account, person, friend, f_list
+from .models import account, person, friend, f_list, make_group
 from django.template import loader
 
 # Create your views here.
@@ -31,6 +31,16 @@ class postlongin(View):
     def post(self,request):
         user = request.user
         if user.is_active:
+            if len(request.POST.getlist("friend_make_grp")) > 0:
+                mems_users = [User.objects.get(username=x) for x in request.POST.getlist("friend_make_grp")]
+                mems = [ person.objects.get(user = x) for x in mems_users]
+                new_grp = make_group(gname=request.POST.get("make_grp_name"))
+                new_grp.save()
+                for x in mems:
+                    new_grp.glist.add(x)
+
+                new_grp.save()
+
             all_people = person.objects.all()
             p = person.objects.get(user=user)
             pf = friend.objects.get(frnd=p)
