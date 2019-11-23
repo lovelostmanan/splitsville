@@ -4,8 +4,9 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from .models import account, person, friend, f_list, make_group
+from .models import account, person, friend, f_list, make_group, expense
 from django.template import loader
+import decimal
 
 # Create your views here.
 from django.http import HttpResponse
@@ -26,16 +27,27 @@ class postlongin(View):
             all_grps = make_group.objects.all()
             my_grps = []
 
+            c = 0
             for x in all_grps:
                 for y in x.glist.all():
                     if y == p:
                         my_grps.append(x)
+                        if c == 0:
+                            c=1
+                            activity = expense.objects.filter(group=x)
+                        else:
+                            accc = expense.objects.filter(group=x)
+                            activity = activity.union(accc)
 
+
+            my_acc = account.objects.get(holder=p)
+            
             context = {"user":user,
-                        "bal":account,
+                        "bal":my_acc,
                         "frnds":flist,
                         "all":all_people,
-                        "my_grps":my_grps}
+                        "my_grps":my_grps,
+                        "activity":activity}
             return render(request,self.temp,context)
         else:
             return HttpResponse("login failed")
@@ -70,22 +82,59 @@ class postlongin(View):
                     frnt_flist.frnd.add(pf)
                     frnt_flist.save()
                     flist.frnd.add(frnd_friend)
-                    flist.save()            
+                    flist.save()
 
+            if type(request.POST.get("expense_name")) != type(None) :    
+                ex_name = request.POST.get("expense_name") 
+                ex_amt = float(request.POST.get("expense_amt"))
+                ex_grp = request.POST.get("expense_group")
+                print("\n\n\n\n\n",ex_grp,"\n\n\n\n")
+                grp = make_group.objects.filter(gname=ex_grp)[0]
+                ex = expense(name=ex_name,group=grp,amt=ex_amt)
+                ex.save()
+
+                mem_ex = grp.glist.all()
+                mem_count = len(mem_ex)
+                dis_amt = float(ex_amt)/ mem_count
+
+                for x in mem_ex:
+                    if x != p:
+                        acc = account.objects.get(holder=x)
+                        print(acc.holder, acc.youowe)
+                        acc.youowe = decimal.Decimal(acc.youowe) + decimal.Decimal(dis_amt)
+                        
+                        acc.save()
+                    else:
+                        macc = account.objects.get(holder=x)
+                        macc.youareowed = decimal.Decimal(macc.youareowed) + decimal.Decimal(ex_amt)
+                        print(macc.holder,macc.youareowed)
+                        macc.save()            
+            
             flist_ppl = flist.frnd.all()
             all_grps = make_group.objects.all()
             my_grps = []
 
+            c = 0
             for x in all_grps:
                 for y in x.glist.all():
                     if y == p:
                         my_grps.append(x)
+                        if c == 0:
+                            c=1
+                            activity = expense.objects.filter(group=x)
+                        else:
+                            accc = expense.objects.filter(group=x)
+                            activity = activity.union(accc)
 
+
+            my_acc = account.objects.get(holder=p)
+            
             context = {"user":user,
-                        "bal":account,
+                        "bal":my_acc,
                         "frnds":flist_ppl,
                         "all":all_people,
-                        "my_grps":my_grps}
+                        "my_grps":my_grps,
+                        "activity":activity}
             return render(request,self.temp,context)
         else:
             return HttpResponse("login failed")

@@ -191,13 +191,14 @@ width:150px;}
 					<div class="row justify-content-center">
 						<div class="col-lg-8 col-md-8 col-12">
 
-							<form>
+							<form method="post">
+									{% csrf_token %}
 								<div class="form-group">
 									<div class="input-group input-group-lg">
 										<span class="input-group-addon bg-warning text-white">
 											<i class="fa fa-book fa-3x"></i>
 										</span>
-										<input type="text" name="" class="form-control bg-dark text-white" placeholder="Sub of expense" required>
+										<input type="text" name="expense_name" class="form-control bg-dark text-white" placeholder="Name of expense" required>
 									
 								</div>
 								<div class="form-group">
@@ -205,7 +206,7 @@ width:150px;}
 										<span class="input-group-addon bg-warning text-white">
 											<i class="fa fa-rupee fa-3x"></i>
 										</span>
-										<input type="number" name="" class="form-control bg-dark text-white" placeholder="Amount of expense" required>
+										<input type="number" name="expense_amt" class="form-control bg-dark text-white" placeholder="Amount of expense" required>
 									
 								</div>
 								<div class="form-group">
@@ -213,25 +214,27 @@ width:150px;}
 										<span class="input-group-addon bg-warning text-white">
 											<i class="fa fa-Flag fa-2x"></i>&nbsp &nbsp
 										</span>
-										  <select name="" class="form-control bg-dark text-white" placeholder="Type">
+										  <select name="expense_type" class="form-control bg-dark text-white" placeholder="Type">
   
                                               <option value="equally">Equally</option>
                                                  <option value="owes you ">Owes You</option>
                                                   <option value="You Owe">You Owe</option>
 
-                                                       </select>
+                                        	</select>
 
 								</div>
 								  <div class="input-group input-group-lg">
 										<span class="input-group-addon bg-warning text-white">
 											<i class="fa fa-group fa-2x"></i>&nbsp &nbsp
 										</span>
-										  <select name="" class="form-control bg-dark text-white" placeholder="group">
-                                                <option value="equally"></option>
-                                                 <option value="owes you "></option>
-                                                  <option value="You Owe"></option>
+										  <select name="expense_group" class="form-control bg-dark text-white" placeholder="group">
+											{% for x in my_grps %}
+												<option value="{{x.gname}}">{{x.gname}}</option>
+											{% endfor %}
+											
+										
 
-                                                       </select>
+                                            </select>
 
 								</div><br><br>
 								<div class="form-group">
@@ -260,8 +263,11 @@ width:150px;}
 											</p>
 					<h3><div class="p-2 text-white bg-dark">Party</div></h3>
 					
-
 					
+					{% for x in activity %}
+						{{x.name}} | {{x.group}} | {{x.amt}}
+						<br>
+					{% endfor %}
 					
 
 					
