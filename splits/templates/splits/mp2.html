@@ -109,7 +109,7 @@ width:150px;}
 
 					
 					<h3><div class="p-4 bg-dark text-white font-div" data-toggle="collapse" data-target="#account">
-  							<i class="fa fa-bank fa-2x d-block"></i>Account<br>TotalBalance: {{bal.totalbalance}}<br><div id="f1">youowe: {{bal.youowe}}</div><div id="f2">owesYou: {{bal.youareowed}}</div></h3>
+  							<i class="fa fa-bank fa-2x d-block"></i>Account<br>TotalBalance: {{totbal}}<br><div id="f1">youowe: {{bal.youowe}}</div><div id="f2">owesYou: {{bal.youareowed}}</div></h3>
 
 					
 							  <h3><div class="p-2 text-white bg-dark"><a href="/splits/logout"><input type="button" value="LOGOUT"></a></div></h3>
@@ -261,13 +261,14 @@ width:150px;}
 					
 					<p>
 											</p>
-					<h3><div class="p-2 text-white bg-dark">Party</div></h3>
+					<h3><div class="p-2 text-white bg-dark">
 					
 					
 					{% for x in activity %}
 						{{x.name}} | {{x.group}} | {{x.amt}}
 						<br>
 					{% endfor %}
+				</div></h3>
 					
 
 					

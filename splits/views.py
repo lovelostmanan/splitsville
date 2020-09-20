@@ -28,6 +28,7 @@ class postlongin(View):
             my_grps = []
 
             c = 0
+            activity = None
             for x in all_grps:
                 for y in x.glist.all():
                     if y == p:
@@ -41,9 +42,10 @@ class postlongin(View):
 
 
             my_acc = account.objects.get(holder=p)
-            
+            totalbal = my_acc.youareowed - my_acc.youowe
             context = {"user":user,
                         "bal":my_acc,
+                        "totbal":totalbal,
                         "frnds":flist,
                         "all":all_people,
                         "my_grps":my_grps,
@@ -102,18 +104,17 @@ class postlongin(View):
                         acc = account.objects.get(holder=x)
                         print(acc.holder, acc.youowe)
                         acc.youowe = decimal.Decimal(acc.youowe) + decimal.Decimal(dis_amt)
-                        
                         acc.save()
                     else:
                         macc = account.objects.get(holder=x)
-                        macc.youareowed = decimal.Decimal(macc.youareowed) + decimal.Decimal(ex_amt)
+                        macc.youareowed = decimal.Decimal(macc.youareowed) + decimal.Decimal(ex_amt) - decimal.Decimal(dis_amt)
                         print(macc.holder,macc.youareowed)
                         macc.save()            
             
-            flist_ppl = flist.frnd.all()
+            flist = flist.frnd.all()
             all_grps = make_group.objects.all()
             my_grps = []
-
+            activity = None
             c = 0
             for x in all_grps:
                 for y in x.glist.all():
@@ -128,10 +129,11 @@ class postlongin(View):
 
 
             my_acc = account.objects.get(holder=p)
-            
+            totalbal = my_acc.youareowed - my_acc.youowe
             context = {"user":user,
                         "bal":my_acc,
-                        "frnds":flist_ppl,
+                        "totbal":totalbal,
+                        "frnds":flist,
                         "all":all_people,
                         "my_grps":my_grps,
                         "activity":activity}

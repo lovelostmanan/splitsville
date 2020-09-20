@@ -10,7 +10,7 @@ class person(models.Model):
 
 class account(models.Model):
     holder = models.OneToOneField(person, on_delete=models.CASCADE)
-    totalbalance = models.DecimalField(max_digits=5,decimal_places=3,default=Decimal('0.000'))
+    totalbalance =  models.FloatField(default=0)
     youowe = models.FloatField(default=0)
     youareowed = models.FloatField(default=0)
 
