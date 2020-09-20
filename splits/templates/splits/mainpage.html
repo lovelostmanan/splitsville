@@ -22,7 +22,7 @@ input[type=text], input[type=password] {
 
 /* Set a style for all buttons */
 button {
-  background-color: linear-gradient(to left,#eb0800,#002df3)";
+  background-color: linear-gradient(to left,#eb0800,#002df3);
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -155,6 +155,10 @@ span.psw {
 
       <label for="psw"><b>Password</b></label>
       <input type="password" placeholder="Enter Password" name="psw" required>
+
+      <script src='https://www.google.com/recaptcha/api.js'></script>
+      <div class="g-recaptcha" data-sitekey="{{sitekey}}"></div>
+  
         
       <button type="submit">Login</button>
       <label>

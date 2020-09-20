@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import make_password
 from .models import account, person, friend, f_list, make_group, expense
 from django.template import loader
 import decimal
+from django.conf import settings
 
 # Create your views here.
 from django.http import HttpResponse
@@ -149,9 +150,11 @@ class login(View):
         user = request.user
         if user.is_authenticated:
             return HttpResponseRedirect('/splits/postlogin')
-        return render(request, 'splits/mainpage.html')
+        context = {"sitekey":settings.SITE_KEY}
+        return render(request, 'splits/mainpage.html',context)
 
     def post(self,request):
+
         uname= request.POST.get('uname','')
         password = request.POST.get('psw','')
         user = authenticate(username=uname, password=password)
